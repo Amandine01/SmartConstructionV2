@@ -1,0 +1,43 @@
+.titreresults{
+	margin-top: 20px;
+    margin-left: 50px;
+    margin-bottom: 35px;
+}
+
+.polluant{
+	margin:30px;
+	background-color: white !important;
+	color:black !important;
+	border:none !important;
+	font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+
+.polluant:active{
+	margin:30px;
+	background-color: white !important;
+	color:grey !important;
+	border:none !important;
+	font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+.polluant:hover{
+	margin:30px;
+	background-color: white !important;
+	color:grey !important;
+	border:none !important;
+	font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+.typepolluant{
+	margin-left: 80px;
+	margin-bottom: 25px;
+}
+
+.carte1 .graph{
+	margin:10px;
+	height:400px;
+}

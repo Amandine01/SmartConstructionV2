@@ -1,0 +1,144 @@
+.accueil{
+  overflow-x: hidden !important;
+}
+
+.titre{
+  text-align: center;
+  padding:15rem 0;
+  position:relative;width:100%;
+  color:white;
+
+  height: 600px;
+  background: transparent url('../component/construction.jpg') no-repeat;
+  display:block;
+  background-size: cover;
+}
+
+.soustitre{
+  margin-top: 20px;
+  margin-left: 80px;
+  margin-bottom: 35px;
+}
+
+.texte{
+  margin-top: 20px;
+  text-align: center;
+  padding-left: 80px;
+}
+
+.image{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.member{
+  border-radius: 50%;
+  max-width: 60%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.nom:hover .member {
+  opacity: 0.3;
+}
+
+.nom:hover .member2 {
+  opacity: 0.3;
+}
+
+.nom:hover .member3 {
+  opacity: 0.3;
+}
+
+.nom:hover .member4 {
+  opacity: 0.3;
+}
+
+.nom:hover .member5 {
+  opacity: 0.3;
+}
+
+.nom:hover .member6 {
+  opacity: 0.3;
+}
+
+.nom:hover .member7 {
+  opacity: 0.3;
+}
+
+.legende {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  font-style: italic;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.nom:hover .legende {
+  opacity: 1;
+}
+
+
+.member2{
+  border-radius: 50%;
+  max-width: 68%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.member3{
+  border-radius: 50%;
+  max-width: 70%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.member4{
+  border-radius: 50%;
+  max-width: 70%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.member5{
+  border-radius: 50%;
+  max-width: 70%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.member6{
+  border-radius: 50%;
+  max-width: 70%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.member7{
+  border-radius: 50%;
+  max-width: 70%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+

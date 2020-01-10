@@ -1,0 +1,18 @@
+.barre{
+  background-color: #292D39;
+  color: #919DC4;
+}
+
+.home{
+  margin-left: 80px;
+  font-size: 18px;
+}
+
+.Titre{
+	font-size: 25px;
+	border-right: 1px solid;
+	padding-right : 60px;
+	margin-left: 60px;
+
+
+}
