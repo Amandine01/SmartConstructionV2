@@ -35,9 +35,19 @@
 .typepolluant{
 	margin-left: 80px;
 	margin-bottom: 25px;
+	margin-top: 50px;
 }
 
 .carte1 .graph{
 	margin:10px;
 	height:400px;
+	padding:30px;
+
+}
+
+.carte2 .graph{
+	
+	height:400px;
+	
+
 }
