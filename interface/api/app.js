@@ -5,12 +5,10 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require("cors");
 
-//Nom de ma bdd : SmartConstruction, login : pfe_smartconstruction, psswd : pfe1961 ; je suis pas sûr pour le port
-mongoose.connect('mongodb+srv://pfe_smartconstruction:pfe1961@smartconstruction-vkl5p.mongodb.net/', {dbName: 'SmartConstruction'});
-//'mongodb+srv://pfe_smartconstruction:pfe1961@cluster.mongodb.net/', {dbName: 'SmartConstruction'});
-var db = mongoose.connection;
 
-//mongodb+srv://pfe_smartconstruction:pfe1961@smartconstruction-vkl5p.mongodb.net/test
+mongoose.connect('mongodb+srv://pfe_smartconstruction:pfe1961@smartconstruction-vkl5p.mongodb.net/', {dbName: 'SmartConstruction'});
+
+var db = mongoose.connection;
 
 
 db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
@@ -21,8 +19,10 @@ db.once('open', function (){
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//la collection que j'aimerais afficher = gaz
 var gazRouter = require('./routes/gaz');
+var sonRouter = require('./routes/son');
+var particulesRouter = require('./routes/particules');
+
 
 var app = express();
 
@@ -38,10 +38,10 @@ app.use('/users', usersRouter);
 
 
 app.use('/gaz', gazRouter);  
+app.use('/son', sonRouter);  
+app.use('/particules', particulesRouter);  
 
 
-
-//j'imagine que le port est faux ?
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, function() {
    console.log('Listening at ${PORT}/');
