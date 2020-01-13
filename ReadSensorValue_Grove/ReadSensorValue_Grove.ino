@@ -1,16 +1,3 @@
-/*
-    This is a demo to test gas library
-    This code is running on Xadow-mainboard, and the I2C slave is Xadow-gas
-    There is a ATmega168PA on Xadow-gas, it get sensors output and feed back to master.
-    the data is raw ADC value, algorithm should be realized on master.
-
-    please feel free to write email to me if there is any question
-
-    Jacky Zhang, Embedded Software Engineer
-    qi.zhang@seeed.cc
-    17,mar,2015
-*/
-
 #include <Wire.h>
 #include "MutichannelGasSensor.h"
 
@@ -26,13 +13,12 @@ void setup()
 void loop()
 {
     float c = 0;
-    //Serial.println("Je suis un print");
     
-    c = gas.measure_NH3();
+    /**c = gas.measure_NH3();
     Serial.print("The concentration of NH3 is ");
     if(c>=0) Serial.print(c);
     else Serial.print("invalid");
-    Serial.println(" ppm");
+    Serial.println(" ppm");**/
 
     c = gas.measure_CO();
     Serial.print("The concentration of CO is ");
@@ -46,7 +32,7 @@ void loop()
     else Serial.print("invalid");
     Serial.println(" ppm");
 
-    c = gas.measure_C3H8();
+    /**c = gas.measure_C3H8();
     Serial.print("The concentration of C3H8 is ");
     if(c>=0) Serial.print(c);
     else Serial.print("invalid");
@@ -74,8 +60,8 @@ void loop()
     Serial.print("The concentration of C2H5OH is ");
     if(c>=0) Serial.print(c);
     else Serial.print("invalid");
-    Serial.println(" ppm");
+    Serial.println(" ppm");**/
 
-    delay(1000);
+    delay(10000);
     printf("\n ...");
 }
