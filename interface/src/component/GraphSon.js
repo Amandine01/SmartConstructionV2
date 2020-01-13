@@ -21,6 +21,24 @@ export default class GraphParticules extends React.Component {
 
     const { son } = this.state;
 
+    const data = [];
+    const date =[];
+   
+
+      son.forEach(a => {
+         data.push(a.mesure_son);
+         date.push(a.date_son);
+      });
+
+      const data10=data.slice(Math.max(data.length - 10, 0));
+      const date10=date.slice(Math.max(date.length - 10, 0));
+
+      /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();
+      newdate.push(date);*/
+
+    
+
+    const data_reversed = data.reverse();
 
 
     const options= {
@@ -48,14 +66,14 @@ export default class GraphParticules extends React.Component {
                 },
               },
               xaxis: {
-                categories: son.map((a) => a.date_son),
+                categories: date10
               }
             };
 
 
             const series= [{
               name: "dB",
-              data: son.map((a) => a.mesure_son)
+              data: data10
             }];
 
 
@@ -69,11 +87,7 @@ export default class GraphParticules extends React.Component {
 }
 
 sync() {
-  axios.get("http://localhost:8000/son/")
-    .then((rep) => this.setState({son: rep.data }))
-    .catch((err)=>{
-      console.error(err);
-      this.status(500).send({"errorServer": err})
-    });
-  }
-}
+            axios.get("http://localhost:8000/son")
+            .then((rep) => this.setState({ son: rep.data }));
+          }
+        }
