@@ -24,13 +24,16 @@ export default class GraphParticules extends React.Component {
     const data = [];
     const date =[];
    
+    const valeurs_particules = [];
 
-      particules.forEach(a => {
-         data.push(a.mesure_particules);
-         date.push(a.date_particules);
-      });
-
-      const data10=data.slice(Math.max(data.length - 10, 0));
+  
+    particules.forEach(a => {
+      if (a.nom_particules === "PM1,0"){
+        valeurs_particules.push(a.mesure_particules);
+        date.push(a.date_particules);
+      }
+    })
+      const data10=valeurs_particules.slice(Math.max(valeurs_particules.length - 10, 0));
       const date10=date.slice(Math.max(date.length - 10, 0));
 
       /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();

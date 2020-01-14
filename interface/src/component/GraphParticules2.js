@@ -4,12 +4,12 @@ import { Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 
 
-export default class GraphGaz extends React.Component {
+export default class GraphParticules extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {   
-      gaz: [],
+    this.state = {
+      particules: [],
     };
   }
 
@@ -19,24 +19,21 @@ export default class GraphGaz extends React.Component {
 
   render() {
 
-    const { gaz } = this.state;
+    const { particules } = this.state;
 
     const data = [];
     const date =[];
-
-    const valeursNO2 = [];
    
+    const valeurs_particules = [];
 
   
-      gaz.forEach(a => {
-        if (a.nom_gaz === "NO2"){
-          valeursNO2.push(a.mesure_gaz);
-          date.push(a.date_gaz);
-        }
-      })
-    
-
-      const data10=valeursNO2.slice(Math.max(valeursNO2.length - 10, 0));
+    particules.forEach(a => {
+      if (a.nom_particules === "PM2,5"){
+        valeurs_particules.push(a.mesure_particules);
+        date.push(a.date_particules);
+      }
+    })
+      const data10=valeurs_particules.slice(Math.max(valeurs_particules.length - 10, 0));
       const date10=date.slice(Math.max(date.length - 10, 0));
 
       /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();
@@ -62,7 +59,7 @@ export default class GraphGaz extends React.Component {
         curve: 'straight'
       },
       title: {
-        text: 'Analyse des nuisances sonores',
+        text: 'Analyse des particules fines',
         align: 'left'
       },
       grid: {
@@ -78,7 +75,7 @@ export default class GraphGaz extends React.Component {
 
 
             const series= [{
-              name: "dB",
+              name: "ppm",
               data: data10
             }];
 
@@ -93,7 +90,7 @@ export default class GraphGaz extends React.Component {
 }
 
 sync() {
-            axios.get("http://localhost:8000/gaz")
-            .then((rep) => this.setState({ gaz: rep.data }));
+            axios.get("http://localhost:8000/particules")
+            .then((rep) => this.setState({ particules: rep.data }));
           }
         }

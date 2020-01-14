@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 
 
-export default class GraphGaz extends React.Component {
+export default class GraphGaz2 extends React.Component {
   constructor(props) {
     super(props);
 
@@ -24,19 +24,19 @@ export default class GraphGaz extends React.Component {
     const data = [];
     const date =[];
 
-    const valeursNO2 = [];
-   
+    const valeursCO = [];
+    
 
-  
       gaz.forEach(a => {
-        if (a.nom_gaz === "NO2"){
-          valeursNO2.push(a.mesure_gaz);
+        if (a.nom_gaz === "CO"){
+          valeursCO.push(a.mesure_gaz);
           date.push(a.date_gaz);
         }
       })
     
 
-      const data10=valeursNO2.slice(Math.max(valeursNO2.length - 10, 0));
+
+      const data10=valeursCO.slice(Math.max(valeursCO.length - 10, 0));
       const date10=date.slice(Math.max(date.length - 10, 0));
 
       /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();
