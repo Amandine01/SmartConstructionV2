@@ -1,5 +1,7 @@
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
+#include <Wire.h>
+#include "MutichannelGasSensor.h"
 
 /*Variables*/
 TinyGPS gps;
@@ -16,8 +18,8 @@ void setup()
 {
   /*GPS*/
   Serial.begin(9600);
-  Serial.print("Testing TinyGPS library v. "); Serial.println(TinyGPS::library_version());
-  Serial.println();
+  //Serial.print("Testing TinyGPS library v. "); Serial.println(TinyGPS::library_version());
+  //Serial.println();
   Serial.println("Sats HDOP Latitude  Longitude  Fix  Date       Time     Date Alt    Course Speed Card  Distance Course Card  Chars Sentences Checksum");
   Serial.println("          (deg)     (deg)      Age                      Age  (m)    --- from GPS ----  ---- to London  ----  RX    RX        Fail");
   Serial.println("-------------------------------------------------------------------------------------------------------------------------------------");
@@ -25,7 +27,10 @@ void setup()
 
   /*Microphone*/
   pinMode(sensorPin, INPUT);
-  Serial.begin (9600);
+
+  /*Grove*/
+  gas.begin(0x04);//the default I2C address of the slave is 0x04
+  gas.powerOn();
 }
 
 void loop()
@@ -71,6 +76,56 @@ void loop()
     //Printing the value
     Serial.println (dbValue); 
     delay(800);
+
+    /*Grove*/
+    float c = 0;
+    
+    /**c = gas.measure_NH3();
+    Serial.print("The concentration of NH3 is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");**/
+
+    c = gas.measure_CO();
+    Serial.print("The concentration of CO is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");
+
+    c = gas.measure_NO2();
+    Serial.print("The concentration of NO2 is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");
+
+    /**c = gas.measure_C3H8();
+    Serial.print("The concentration of C3H8 is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");
+    c = gas.measure_C4H10();
+    Serial.print("The concentration of C4H10 is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");
+    c = gas.measure_CH4();
+    Serial.print("The concentration of CH4 is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");
+    c = gas.measure_H2();
+    Serial.print("The concentration of H2 is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");
+    c = gas.measure_C2H5OH();
+    Serial.print("The concentration of C2H5OH is ");
+    if(c>=0) Serial.print(c);
+    else Serial.print("invalid");
+    Serial.println(" ppm");**/
+
+    delay(10000);
+    printf("\n ...");
 }
 
 /*GPS*/
