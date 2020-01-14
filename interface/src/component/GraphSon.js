@@ -4,11 +4,11 @@ import { Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 
 
-export default class GraphParticules extends React.Component {
+export default class GraphSon extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = {   
       son: [],
     };
   }
