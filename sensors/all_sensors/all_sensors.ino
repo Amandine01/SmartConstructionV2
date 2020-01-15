@@ -18,8 +18,6 @@ void setup()
 {
   /*GPS*/
   Serial.begin(9600);
-  //Serial.print("Testing TinyGPS library v. "); Serial.println(TinyGPS::library_version());
-  //Serial.println();
   Serial.println("Sats HDOP Latitude  Longitude  Fix  Date       Time     Date Alt    Course Speed Card  Distance Course Card  Chars Sentences Checksum");
   Serial.println("          (deg)     (deg)      Age                      Age  (m)    --- from GPS ----  ---- to London  ----  RX    RX        Fail");
   Serial.println("-------------------------------------------------------------------------------------------------------------------------------------");
@@ -35,57 +33,61 @@ void setup()
 
 void loop()
 {
-  /*GPS*/
+  boolean grove = false;
+  boolean gps = false; 
+  boolean microphone = false;
+
+  /*Variables gps*/
   float flat, flon;
   unsigned long age, date, time, chars = 0;
   unsigned short sentences = 0, failed = 0;
   static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-  
-  print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
-  print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
-  gps.f_get_position(&flat, &flon, &age);
-  print_float(flat, TinyGPS::GPS_INVALID_F_ANGLE, 10, 6);
-  print_float(flon, TinyGPS::GPS_INVALID_F_ANGLE, 11, 6);
-  print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
-  print_date(gps);
-  print_float(gps.f_altitude(), TinyGPS::GPS_INVALID_F_ALTITUDE, 7, 2);
-  print_float(gps.f_course(), TinyGPS::GPS_INVALID_F_ANGLE, 7, 2);
-  print_float(gps.f_speed_kmph(), TinyGPS::GPS_INVALID_F_SPEED, 6, 2);
-  print_str(gps.f_course() == TinyGPS::GPS_INVALID_F_ANGLE ? "*** " : TinyGPS::cardinal(gps.f_course()), 6);
-  print_int(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0xFFFFFFFF : (unsigned long)TinyGPS::distance_between(flat, flon, LONDON_LAT, LONDON_LON) / 1000, 0xFFFFFFFF, 9);
-  print_float(flat == TinyGPS::GPS_INVALID_F_ANGLE ? TinyGPS::GPS_INVALID_F_ANGLE : TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON), TinyGPS::GPS_INVALID_F_ANGLE, 7, 2);
-  print_str(flat == TinyGPS::GPS_INVALID_F_ANGLE ? "*** " : TinyGPS::cardinal(TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON)), 6);
 
-  gps.stats(&chars, &sentences, &failed);
-  print_int(chars, 0xFFFFFFFF, 6);
-  print_int(sentences, 0xFFFFFFFF, 10);
-  print_int(failed, 0xFFFFFFFF, 9);
-  Serial.println();
+  /*Variables microphone*/
+  //read ref voltage
+  float ref_volt = float(readVcc())/1000.0;
+  //Serial.println ("Voltage = "); 
+  //Serial.println(ref_volt);
+  //Value in decibel 
+  float dbValue;
+
+  /*Variables grove*/
+  float c = 0;
+
+  /*GPS*/ 
+  if(gps == true){
+    print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
+    print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
+    gps.f_get_position(&flat, &flon, &age);
+    print_float(flat, TinyGPS::GPS_INVALID_F_ANGLE, 10, 6);
+    print_float(flon, TinyGPS::GPS_INVALID_F_ANGLE, 11, 6);
+    print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
+    print_date(gps);
+    print_float(gps.f_altitude(), TinyGPS::GPS_INVALID_F_ALTITUDE, 7, 2);
+    print_float(gps.f_course(), TinyGPS::GPS_INVALID_F_ANGLE, 7, 2);
+    print_float(gps.f_speed_kmph(), TinyGPS::GPS_INVALID_F_SPEED, 6, 2);
+    print_str(gps.f_course() == TinyGPS::GPS_INVALID_F_ANGLE ? "*** " : TinyGPS::cardinal(gps.f_course()), 6);
+    print_int(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0xFFFFFFFF : (unsigned long)TinyGPS::distance_between(flat, flon, LONDON_LAT, LONDON_LON) / 1000, 0xFFFFFFFF, 9);
+    print_float(flat == TinyGPS::GPS_INVALID_F_ANGLE ? TinyGPS::GPS_INVALID_F_ANGLE : TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON), TinyGPS::GPS_INVALID_F_ANGLE, 7, 2);
+    print_str(flat == TinyGPS::GPS_INVALID_F_ANGLE ? "*** " : TinyGPS::cardinal(TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON)), 6);
   
-  smartdelay(1000);
+    gps.stats(&chars, &sentences, &failed);
+    print_int(chars, 0xFFFFFFFF, 6);
+    print_int(sentences, 0xFFFFFFFF, 10);
+    print_int(failed, 0xFFFFFFFF, 9);
+    Serial.println();    
+  }
 
   /*Microphone*/
-  //read ref voltage
-    float ref_volt = float(readVcc())/1000.0;
-    //Serial.println ("Voltage = "); 
-    //Serial.println(ref_volt);
-    //Value in decibel 
-    float dbValue;
+  if(gps == false){
     //Reading the db value 
     dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0;    
     //Printing the value
     Serial.println (dbValue); 
-    delay(800);
-
-    /*Grove*/
-    float c = 0;
+  }
     
-    /**c = gas.measure_NH3();
-    Serial.print("The concentration of NH3 is ");
-    if(c>=0) Serial.print(c);
-    else Serial.print("invalid");
-    Serial.println(" ppm");**/
-
+  /*Grove*/
+  if(gps == false){   
     c = gas.measure_CO();
     Serial.print("The concentration of CO is ");
     if(c>=0) Serial.print(c);
@@ -97,35 +99,12 @@ void loop()
     if(c>=0) Serial.print(c);
     else Serial.print("invalid");
     Serial.println(" ppm");
-
-    /**c = gas.measure_C3H8();
-    Serial.print("The concentration of C3H8 is ");
-    if(c>=0) Serial.print(c);
-    else Serial.print("invalid");
-    Serial.println(" ppm");
-    c = gas.measure_C4H10();
-    Serial.print("The concentration of C4H10 is ");
-    if(c>=0) Serial.print(c);
-    else Serial.print("invalid");
-    Serial.println(" ppm");
-    c = gas.measure_CH4();
-    Serial.print("The concentration of CH4 is ");
-    if(c>=0) Serial.print(c);
-    else Serial.print("invalid");
-    Serial.println(" ppm");
-    c = gas.measure_H2();
-    Serial.print("The concentration of H2 is ");
-    if(c>=0) Serial.print(c);
-    else Serial.print("invalid");
-    Serial.println(" ppm");
-    c = gas.measure_C2H5OH();
-    Serial.print("The concentration of C2H5OH is ");
-    if(c>=0) Serial.print(c);
-    else Serial.print("invalid");
-    Serial.println(" ppm");**/
-
-    delay(10000);
     printf("\n ...");
+  }
+
+  /*Delay*/
+  delay(1000);
+
 }
 
 /*GPS*/
