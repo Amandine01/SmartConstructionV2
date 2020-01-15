@@ -40,7 +40,6 @@ export default class Analyses extends Component {
 
 
         <Col xs="2" sm="2"></Col>
-        <Col sm="12" md={{ size: 5, offset: 4 }}> <GraphGaz2 /></Col>
   
 
 
@@ -64,11 +63,7 @@ export default class Analyses extends Component {
 
         <Col xs="2" sm="2"></Col>
 
-        <Col sm="12" md={{ size: 5, offset: 4 }}> <GraphParticules2 /></Col>
-  
-
-
-
+      
 
         <Col xs="12" sm="12"> <h2 className="typepolluant">Pollution sonore</h2> </Col>
         <Col sm="1"></Col>

@@ -22,6 +22,7 @@ var usersRouter = require('./routes/users');
 var gazRouter = require('./routes/gaz');
 var sonRouter = require('./routes/son');
 var particulesRouter = require('./routes/particules');
+var capteursRouter = require('./routes/capteurs');
 
 
 var app = express();
@@ -40,6 +41,7 @@ app.use('/users', usersRouter);
 app.use('/gaz', gazRouter);  
 app.use('/son', sonRouter);  
 app.use('/particules', particulesRouter);  
+app.use('/capteurs', capteursRouter); 
 
 
 const PORT = process.env.PORT || 8000;

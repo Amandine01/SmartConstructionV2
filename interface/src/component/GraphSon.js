@@ -9,7 +9,7 @@ export default class GraphSon extends React.Component {
     super(props);
 
     this.state = {   
-      son: [],
+      capteurs: [],
     };
   }
 
@@ -19,18 +19,23 @@ export default class GraphSon extends React.Component {
 
   render() {
 
-    const { son } = this.state;
+    const { capteurs } = this.state;
 
     const data = [];
     const date =[];
    
 
-      son.forEach(a => {
-         data.push(a.mesure_son);
-         date.push(a.date_son);
-      });
+    const valeurs_son = [];
 
-      const data10=data.slice(Math.max(data.length - 10, 0));
+  
+    capteurs.forEach(a => {
+      if (a.nom_capteur === "1"){
+        valeurs_son.push(a.Son);
+        date.push(a.date);
+      }
+    })
+
+      const data10=valeurs_son.slice(Math.max(valeurs_son.length - 10, 0));
       const date10=date.slice(Math.max(date.length - 10, 0));
 
       /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();
@@ -66,6 +71,7 @@ export default class GraphSon extends React.Component {
                 },
               },
               xaxis: {
+                type: 'datetime',
                 categories: date10
               }
             };
@@ -87,7 +93,7 @@ export default class GraphSon extends React.Component {
 }
 
 sync() {
-            axios.get("http://localhost:8000/son")
-            .then((rep) => this.setState({ son: rep.data }));
+            axios.get("http://localhost:8000/capteurs")
+            .then((rep) => this.setState({ capteurs: rep.data }));
           }
         }
