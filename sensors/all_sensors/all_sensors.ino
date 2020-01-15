@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
-#include <Wire.h>
-#include "MutichannelGasSensor.h"
+//#include <Wire.h>
+//#include "MutichannelGasSensor.h"
 
 /*Variables*/
 TinyGPS gps;
@@ -27,21 +27,15 @@ void setup()
   pinMode(sensorPin, INPUT);
 
   /*Grove*/
-  gas.begin(0x04);//the default I2C address of the slave is 0x04
-  gas.powerOn();
+  //gas.begin(0x04);//the default I2C address of the slave is 0x04
+  //gas.powerOn();
 }
 
 void loop()
 {
-  boolean grove = false;
-  boolean gps = false; 
-  boolean microphone = false;
-
-  /*Variables gps*/
-  float flat, flon;
-  unsigned long age, date, time, chars = 0;
-  unsigned short sentences = 0, failed = 0;
-  static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
+  boolean bogrove = false;
+  boolean bogps = true; 
+  boolean bomicrophone = true;
 
   /*Variables microphone*/
   //read ref voltage
@@ -55,7 +49,14 @@ void loop()
   float c = 0;
 
   /*GPS*/ 
-  if(gps == true){
+  if(bogps == true){
+    
+    /*Variables gps*/
+    float flat, flon;
+    unsigned long age, date, time, chars = 0;
+    unsigned short sentences = 0, failed = 0;
+    static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
+  
     print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
     print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
     gps.f_get_position(&flat, &flon, &age);
@@ -79,7 +80,7 @@ void loop()
   }
 
   /*Microphone*/
-  if(gps == false){
+  if(bomicrophone == true){
     //Reading the db value 
     dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0;    
     //Printing the value
@@ -87,7 +88,7 @@ void loop()
   }
     
   /*Grove*/
-  if(gps == false){   
+  /*if(bogrove == false){   
     c = gas.measure_CO();
     Serial.print("The concentration of CO is ");
     if(c>=0) Serial.print(c);
@@ -100,11 +101,10 @@ void loop()
     else Serial.print("invalid");
     Serial.println(" ppm");
     printf("\n ...");
-  }
+  }*/
 
   /*Delay*/
-  delay(1000);
-
+  smartdelay(1000);
 }
 
 /*GPS*/
