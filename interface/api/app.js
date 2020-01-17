@@ -19,9 +19,6 @@ db.once('open', function (){
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var gazRouter = require('./routes/gaz');
-var sonRouter = require('./routes/son');
-var particulesRouter = require('./routes/particules');
 var capteursRouter = require('./routes/capteurs');
 
 
@@ -37,10 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-
-app.use('/gaz', gazRouter);  
-app.use('/son', sonRouter);  
-app.use('/particules', particulesRouter);  
+ 
 app.use('/capteurs', capteursRouter); 
 
 

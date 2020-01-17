@@ -81,7 +81,7 @@ export default class GraphParticules extends React.Component {
         dashArray: [0, 8, 5]
       },
       title: {
-        text: 'Analyses des gaz',
+        text: 'Analyses des particules fines',
         align: 'left'
       },
       legend: {
