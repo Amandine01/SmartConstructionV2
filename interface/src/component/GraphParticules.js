@@ -10,6 +10,7 @@ export default class GraphParticules extends React.Component {
 
     this.state = {
       capteurs:[],
+      value:'1',
     }
   }
 
@@ -17,52 +18,35 @@ export default class GraphParticules extends React.Component {
     this.sync();
   }
 
+  componentWillReceiveProps(nextProps){
+    this.setState({value: nextProps.value})
+  }
+
   render() {
 
-    const { capteurs } = this.state;
+    const { capteurs, value } = this.state;
 
 
     const valeursPM10 = [];
     const valeursPM25 = [];
     const date = [];
     
+    console.log(value);
     
 
-      capteurs.forEach(a => {
-       if (a.nom_capteur === "1"){
-        valeursPM10.push(a.PM10);
-        valeursPM25.push(a.PM25);
-        date.push(a.date);
-      }
-   
-      
-       /* var month = (a.date_gaz).toLocaleDateString() 
-        var day = (a.date_gaz).getUTCDate();
-        var year = (a.date_gaz).getUTCFullYear(); */
-       /* newdate = a.date_gaz.toLocaleDateString()
-        newdate.push(date);*/
-      });
+    capteurs.forEach(a => {
+     if (a.nom_capteur == value){
+      valeursPM10.push(a.PM10);
+      valeursPM25.push(a.PM25);
+      date.push(a.date);
+    }
 
-      const data10_PM10=valeursPM10.slice(Math.max(valeursPM10.length - 10, 0));
-      const data10_PM25=valeursPM25.slice(Math.max(valeursPM25.length - 10, 0));
-      const date10=date.slice(Math.max(date.length - 10, 0));
+  });
 
-      /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();
-      newdate.push(date);*/
+    const data10_PM10=valeursPM10.slice(Math.max(valeursPM10.length - 10, 0));
+    const data10_PM25=valeursPM25.slice(Math.max(valeursPM25.length - 10, 0));
+    const date10=date.slice(Math.max(date.length - 10, 0));
 
-    
-
-    /*for (let i = 0; i < 20; ++i) {
-      const an = ajd - i;
-      ans.push(01/01/${an});
-      let nb = 0;
-      albums.forEach(a => {
-        if (new Date(a.release).getFullYear() === an) {
-          nb++;
-        }
-      });
-      nbs.push(nb);
-    }*/
 
     const options = {
       chart: {
@@ -81,7 +65,7 @@ export default class GraphParticules extends React.Component {
         dashArray: [0, 8, 5]
       },
       title: {
-        text: 'Analyses des particules fines',
+        text: 'Analyses des particules fines du capteur ' + value ,
         align: 'left'
       },
       legend: {
@@ -137,23 +121,23 @@ export default class GraphParticules extends React.Component {
       name: "PM25",
       data: data10_PM25
     },
-   
+
     ]
 
 
 
     return (
 
-<div id = "chart">
+      <div id = "chart">
 
-<Chart options={options} series={series} type="line" height={350} />
+      <Chart options={options} series={series} type="line" height={350} />
       </div>
       );
     }
 
 
-sync() {
-            axios.get("http://localhost:8000/capteurs")
-            .then((rep) => this.setState({ capteurs: rep.data }));
-          }
-        }
+    sync() {
+      axios.get("http://localhost:8000/capteurs")
+      .then((rep) => this.setState({ capteurs: rep.data }));
+    }
+  }

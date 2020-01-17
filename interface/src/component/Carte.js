@@ -11,25 +11,36 @@ const mapStyles = {
 class MapContainer extends Component {
   constructor(props) {
     super(props);
-
+    this.senData=this.sendData.bind(this);
+    this.marker1=this.marker1.bind(this);
+    this.marker2=this.marker2.bind(this);
     this.state = {
       capteurs: [],
-      
     }
   }
 
   componentDidMount() {
     this.sync();
   } 
+
+  sendData(nom) {
+    this.props.parentCallback(nom);
+  }
+
+
   marker1(){
     console.log("marker 1 cliqué");
+    this.sendData(1);
+
   }
-    
   
 
   marker2(){
     console.log("marker 2 cliqué");
+    this.sendData(2);
   }
+
+  
 
 
   render() {
@@ -58,16 +69,9 @@ class MapContainer extends Component {
       }
 
 
-      /* var month = (a.date_gaz).toLocaleDateString() 
-       var day = (a.date_gaz).getUTCDate();
-       var year = (a.date_gaz).getUTCFullYear(); */
-      /* newdate = a.date_gaz.toLocaleDateString()
-       newdate.push(date);*/
+      
     });
 
-    ///////////////////////////////:
-
-    // {this.displayMarkers()}
 
 
     const derniere_lat = latitude_capteur.slice(Math.max(latitude_capteur.length - 1, 0));
@@ -79,37 +83,37 @@ class MapContainer extends Component {
 
     return (
       <Map
-        google={this.props.google}
-        zoom={13}
-        style={mapStyles}
-        initialCenter={{ lat: 48.85, lng: 2.28 }}
+      google={this.props.google}
+      zoom={13}
+      style={mapStyles}
+      initialCenter={{ lat: 48.85, lng: 2.28 }}
       >
-        <Marker 
-        name={'Capteur 1'}
-        position={
-          { lat: derniere_lat, lng: derniere_long }} 
-          onClick={this.marker1}
+      <Marker 
+      name={'Capteur 1'}
+      position={
+        { lat: derniere_lat, lng: derniere_long }} 
+        onClick={this.marker1}
         />
 
         <Marker 
-                name={'Capteur 2'}
+        name={'Capteur 2'}
         position={
           { lat: derniere_lat2, lng: derniere_long2 }} 
           onClick={this.marker2}
           />
 
 
-      </Map>
+          </Map>
 
-    );
-  }
-  sync() {
-    axios.get("http://localhost:8000/capteurs")
-      .then((rep) => this.setState({ capteurs: rep.data }));
-  }
-}
+          );
+        }
+        sync() {
+          axios.get("http://localhost:8000/capteurs")
+          .then((rep) => this.setState({ capteurs: rep.data }));
+        }
+      }
 
 
-export default GoogleApiWrapper({
-  apiKey: 'AIzaSyDxWbabVF0eE7_LzXGBcvfypVdW19omOLY'
-})(MapContainer);
+      export default GoogleApiWrapper({
+        apiKey: 'AIzaSyDxWbabVF0eE7_LzXGBcvfypVdW19omOLY'
+      })(MapContainer);

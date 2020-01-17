@@ -7,10 +7,14 @@ import axios from 'axios';
 export default class GraphParticules extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       capteurs:[],
+      value:'1',
     }
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({value: nextProps.value})
   }
 
   componentDidMount() {
@@ -19,7 +23,7 @@ export default class GraphParticules extends React.Component {
 
   render() {
 
-    const { capteurs } = this.state;
+    const { capteurs, value } = this.state;
 
 
     const valeursCO = [];
@@ -27,42 +31,23 @@ export default class GraphParticules extends React.Component {
     const date = [];
     
     
-
-      capteurs.forEach(a => {
-       if (a.nom_capteur === "1"){
-        valeursCO.push(a.CO);
-        valeursNO2.push(a.NO2);
-        date.push(a.date);
-      }
-   
-      
-       /* var month = (a.date_gaz).toLocaleDateString() 
-        var day = (a.date_gaz).getUTCDate();
-        var year = (a.date_gaz).getUTCFullYear(); */
-       /* newdate = a.date_gaz.toLocaleDateString()
-        newdate.push(date);*/
-      });
-
-      const data10_CO=valeursCO.slice(Math.max(valeursCO.length - 10, 0));
-      const data10_NO2=valeursNO2.slice(Math.max(valeursNO2.length - 10, 0));
-      const date10=date.slice(Math.max(date.length - 10, 0));
-
-      /*newdate = new Date (gaz[i].date_gaz).toLocaleDateString();
-      newdate.push(date);*/
-
+    console.log(value);
+    
+    capteurs.forEach(a => {
+     if (a.nom_capteur == value){
+      valeursCO.push(a.CO);
+      valeursNO2.push(a.NO2);
+      date.push(a.date);
+    }
+    
+  });
     
 
-    /*for (let i = 0; i < 20; ++i) {
-      const an = ajd - i;
-      ans.push(01/01/${an});
-      let nb = 0;
-      albums.forEach(a => {
-        if (new Date(a.release).getFullYear() === an) {
-          nb++;
-        }
-      });
-      nbs.push(nb);
-    }*/
+    const data10_CO=valeursCO.slice(Math.max(valeursCO.length - 10, 0));
+    const data10_NO2=valeursNO2.slice(Math.max(valeursNO2.length - 10, 0));
+    const date10=date.slice(Math.max(date.length - 10, 0));
+
+    
 
     const options = {
       chart: {
@@ -81,7 +66,7 @@ export default class GraphParticules extends React.Component {
         dashArray: [0, 8, 5]
       },
       title: {
-        text: 'Analyses des gaz',
+        text: 'Analyses des gaz du capteur ' + value,
         align: 'left'
       },
       legend: {
@@ -137,23 +122,23 @@ export default class GraphParticules extends React.Component {
       name: "NO2",
       data: data10_NO2
     },
-   
+    
     ]
 
 
 
     return (
 
-<div id = "chart">
-
-<Chart options={options} series={series} type="line" height={350} />
+      <div id = "chart">
+      <Chart options={options} series={series} type="line" height={350} />
       </div>
+
       );
     }
 
 
-sync() {
-            axios.get("http://localhost:8000/capteurs")
-            .then((rep) => this.setState({ capteurs: rep.data }));
-          }
-        }
+    sync() {
+      axios.get("http://localhost:8000/capteurs")
+      .then((rep) => this.setState({ capteurs: rep.data }));
+    }
+  }

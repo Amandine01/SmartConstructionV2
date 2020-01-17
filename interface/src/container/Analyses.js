@@ -10,72 +10,77 @@ import GraphSon from '../component/GraphSon';
 
 export default class Analyses extends Component {
 
+  state ={message:""}
+
+  callbackFunction = (childData) => {
+    this.setState({message: childData})
+  }
+
 
   render() {
 
     return (
       <Row Class>
-        <Col xs="12" sm="12"> <h1 className="titreresults">Analyses de la pollution sur le chantier </h1> </Col>
-         <Col sm="1"></Col>
-        <Col xs="12" sm="10" className="espacecarte">
+      <Col xs="12" sm="12"> <h1 className="titreresults">Analyses de la pollution sur le chantier </h1> </Col>
+      <Col sm="1"></Col>
+      <Col xs="12" sm="10" className="espacecarte">
 
-          <Carte />
-
-        </Col>
-        <Col xs="1" sm="1"></Col>
-
-        
-  
+      <Carte parentCallback = {this.callbackFunction}/>
 
 
-        
-        <Col xs="12" sm="12"> <h2 className="typepolluant">Gaz polluants</h2> </Col>
-        
-        <Col xs="3" sm="1"></Col>
+      </Col>
+      <Col xs="1" sm="1"></Col>
+      
+      
 
-        <Col xs="12" sm="10" className="graph">
+      
+      <Col xs="12" sm="12"> <h2 className="typepolluant">Gaz polluants</h2> </Col>
+      
+      <Col sm="1"></Col>
+      
+      <Col xs="12" sm="10" className="graph">
 
-          <GraphGaz />
+      <GraphGaz value = {this.state.message} />
 
 
-        </Col>
-
-
-
-        <Col xs="2" sm="2"></Col>
-  
+      </Col>
 
 
 
-
-        <Col xs="12" sm="12"> <h2 className="typepolluant">Particules fines</h2> </Col>
-        <Col sm="1"></Col>
-        
+      <Col xs="2" sm="2"></Col>
+      
 
 
-        <Col xs="12" sm="10" className="graph">
 
-          <GraphParticules />
 
-        </Col>
+      <Col xs="12" sm="12"> <h2 className="typepolluant">Particules fines</h2> </Col>
+      <Col sm="1"></Col>
+      
 
-        <Col xs="2" sm="1"></Col>
+
+      <Col xs="12" sm="10" className="graph">
+
+      <GraphParticules value = {this.state.message} />
+
+      </Col>
+
+      <Col xs="2" sm="1"></Col>
 
       
 
-        <Col xs="12" sm="12"> <h2 className="typepolluant">Pollution sonore</h2> </Col>
-        <Col sm="1"></Col>
-        
+      <Col xs="12" sm="12"> <h2 className="typepolluant">Pollution sonore</h2> </Col>
+      <Col sm="1"></Col>
+      
 
 
-        <Col xs="12" sm="10" className="graph">
+      <Col xs="12" sm="10" className="graph">
 
-          <GraphSon />
+      <GraphSon value = {this.state.message} />
 
-        </Col>
+      </Col>
 
       </Row>
-    );
+      );
   }
 }
 
