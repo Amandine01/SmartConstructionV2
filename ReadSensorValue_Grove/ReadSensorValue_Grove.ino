@@ -36,6 +36,7 @@ void loop()
   boolean bogrove = true;
   boolean bogps = false; 
   boolean bomicrophone = false;
+  char strpacket[800];
 
   /*Variables microphone*/
   //read ref voltage
@@ -103,6 +104,11 @@ void loop()
     printf("\n ...");
   }
 
+  //Nettoyer le code et mettre
+  //strcpy(strpacket, resgrove);
+  //strcat(strpacket, resmic);
+  //strcat(strpacket, resgps);
+  
   /*Delay*/
   smartdelay(1000);
 }
