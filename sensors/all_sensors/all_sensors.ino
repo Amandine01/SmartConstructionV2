@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
-//#include <Wire.h>
-//#include "MutichannelGasSensor.h"
+#include <Wire.h>
+#include "MutichannelGasSensor.h"
 
 /*Variables*/
 TinyGPS gps;
@@ -27,22 +27,24 @@ void setup()
   pinMode(sensorPin, INPUT);
 
   /*Grove*/
-  //gas.begin(0x04);//the default I2C address of the slave is 0x04
-  //gas.powerOn();
+  gas.begin(0x04);//the default I2C address of the slave is 0x04
+  gas.powerOn();
 }
 
 void loop()
 {
   boolean bogrove = false;
-  boolean bogps = true; 
-  boolean bomicrophone = true;
+  boolean bogps = false; 
+  boolean bomicrophone = false;
+  char strpacket[800] = "";
+  char resgrove[200] = "";
+  char resgps[400] = "";
+  char resmicro[200] = "";
+  char tempstr[200] = "";
+  Serial.println("Je suis un print");
 
   /*Variables microphone*/
-  //read ref voltage
   float ref_volt = float(readVcc())/1000.0;
-  //Serial.println ("Voltage = "); 
-  //Serial.println(ref_volt);
-  //Value in decibel 
   float dbValue;
 
   /*Variables grove*/
@@ -81,30 +83,49 @@ void loop()
 
   /*Microphone*/
   if(bomicrophone == true){
-    //Reading the db value 
-    dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0;    
-    //Printing the value
-    Serial.println (dbValue); 
+    dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0; 
+    Serial.print("Bruit : ");   
+    Serial.print(dbValue);
+    Serial.println(" db");
   }
     
   /*Grove*/
-  /*if(bogrove == false){   
+  if(bogrove == true){   
     c = gas.measure_CO();
     Serial.print("The concentration of CO is ");
-    if(c>=0) Serial.print(c);
+    if(c>=0) {
+      Serial.print(c);
+      sprintf(resgrove, "%f", c);
+    }
     else Serial.print("invalid");
     Serial.println(" ppm");
 
     c = gas.measure_NO2();
     Serial.print("The concentration of NO2 is ");
-    if(c>=0) Serial.print(c);
+    if(c>=0) {
+      Serial.print(c);
+      sprintf(tempstr, "%f", c);
+      strcat(resgrove, tempstr);
+    }
     else Serial.print("invalid");
     Serial.println(" ppm");
-    printf("\n ...");
-  }*/
+  }
 
+  Serial.println("Test Concat :");
+  Serial.print("Resultats Grove :");
+  Serial.println(resgrove);
+  //Serial.print("Resultats Microphone :");
+  //Serial.println(resmicro);
+  //Serial.print("Resultats GPS :");
+  //Serial.println(resgps);
+  
+  //Nettoyer le code et mettre
+  //strcpy(strpacket, resgrove);
+  //strcat(strpacket, resmic);
+  //strcat(strpacket, resgps);
+  
   /*Delay*/
-  smartdelay(1000);
+  smartdelay(2000);
 }
 
 /*GPS*/
@@ -207,4 +228,5 @@ long readVcc() {
 
   result = 1125300L / result; // Calculate Vcc (in mV); 1125300 = 1.1*1023*1000
   return result; // Vcc in millivolts
+  
 }
