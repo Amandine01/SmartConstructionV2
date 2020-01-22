@@ -34,8 +34,8 @@ void setup()
 void loop()
 {
   boolean bogrove = true;
-  boolean bogps = false; 
-  boolean bomicrophone = false;
+  boolean bogps = true; 
+  boolean bomicrophone = true;
   char strpacket[800];
 
   /*Variables microphone*/
