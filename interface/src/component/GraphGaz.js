@@ -3,8 +3,9 @@ import Chart from 'react-apexcharts'
 import { Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 
-
+//Graphique pour les polluants de type Gaz
 export default class GraphParticules extends React.Component {
+  /*constructeur définissant un tableau de capteurs et une valeur de marker gps choisi par défault à 1*/
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +13,8 @@ export default class GraphParticules extends React.Component {
       value:'1',
     }
   }
-
+  
+  //mise à jour de la valeur si marker cliqué
   componentWillReceiveProps(nextProps){
     this.setState({value: nextProps.value})
   }
@@ -22,33 +24,36 @@ export default class GraphParticules extends React.Component {
   }
 
   render() {
-
     const { capteurs, value } = this.state;
-
-
-    const valeursCO = [];
-    const valeursNO2 = [];
-    const date = [];
     
+    /*tableau des valeurs des gaz CO mesurés*/
+    const valeursCO = [];
+    /*tableau des valeurs des gaz NO2 mesurés*/
+    const valeursNO2 = [];
+    /*tableau des dates des mesures*/
+    const date = [];
     
     console.log(value);
     
+    /*on parcourt toute la collection de capteurs de la base de données*/
     capteurs.forEach(a => {
-     if (a.nom_capteur == value){
-      valeursCO.push(a.CO);
-      valeursNO2.push(a.NO2);
-      date.push(a.date);
-    }
+      /*si le nom du capteur correspond à celui qui est cliqué sur la carte*/
+      if (a.nom_capteur == value){
+        /*on remplit le tableau de CO du capteur correspondant*/
+        valeursCO.push(a.CO);
+        /*on remplit le tableau de NO2 du capteur correspondant*/
+        valeursNO2.push(a.NO2);
+        /*on remplit le tableau de date des mesures*/
+        date.push(a.date);
+      }  
+    });
     
-  });
-    
-
+    //on ne garde que les 10 dernières mesures de CO et NO2 et les 10 dernières dates
     const data10_CO=valeursCO.slice(Math.max(valeursCO.length - 10, 0));
     const data10_NO2=valeursNO2.slice(Math.max(valeursNO2.length - 10, 0));
     const date10=date.slice(Math.max(date.length - 10, 0));
 
-    
-
+    /*option du graphique*/
     const options = {
       chart: {
         height: 350,
@@ -80,6 +85,7 @@ export default class GraphParticules extends React.Component {
           sizeOffset: 6
         }
       },
+      //dates des mesures
       xaxis: {
         type: 'datetime',
         categories: date10
@@ -113,7 +119,8 @@ export default class GraphParticules extends React.Component {
         borderColor: '#f1f1f1',
       }
     };
-
+    
+    //mesures
     const series= [{
       name: "CO",
       data: data10_CO
@@ -121,24 +128,19 @@ export default class GraphParticules extends React.Component {
     {
       name: "NO2",
       data: data10_NO2
-    },
-    
+    }, 
     ]
 
-
-
     return (
-
       <div id = "chart">
-      <Chart options={options} series={series} type="line" height={350} />
+        <Chart options={options} series={series} type="line" height={350} />
       </div>
-
-      );
-    }
-
-
-    sync() {
-      axios.get("http://localhost:8000/capteurs")
-      .then((rep) => this.setState({ capteurs: rep.data }));
-    }
+    );
   }
+
+  /*Méthode GET, lecture de toute la collection capteurs de la base de données*/
+  sync() {
+    axios.get("http://localhost:8000/capteurs")
+    .then((rep) => this.setState({ capteurs: rep.data }));
+  }
+}

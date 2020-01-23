@@ -3,7 +3,7 @@ const Capteurs = require('../models/capteurs.model.js');
 
 const router = express.Router();
 
-/* GET son listing. */
+/* GET capteurs listing. */
 router.get('/', (req, res) => {
   Capteurs.find()
     .then(function (capteurs) {

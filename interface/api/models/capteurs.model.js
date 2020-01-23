@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 
+//Model du capteur
 const CapteursSchema = new mongoose.Schema({
      nom_capteur : String,
      date : Date,

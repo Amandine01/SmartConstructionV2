@@ -12,6 +12,7 @@ import { Container,
   Col} from 'reactstrap';
   import './Navigation.css';
 
+//barre de navigation
 class Navigation extends Component {
   constructor(props) {
    super(props);
@@ -29,22 +30,22 @@ class Navigation extends Component {
   render() {
     return (
       <header className="barre">
-      <div>
-       <Navbar dark expand="md">
-          <NavbarBrand className="Titre" style={{color: 'white'}} href="/">Smart Construction</NavbarBrand>
-          <NavbarToggler  onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="mr-auto" navbar>
-              <NavItem>
-                <NavLink className="home" style={{color: 'white'}} to="/">Le Projet</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink className="home" style={{color: 'white'}} to="/analyses">Analyses</NavLink>
-              </NavItem>
-              </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
+        <div>
+         <Navbar dark expand="md">
+            <NavbarBrand className="Titre" style={{color: 'white'}} href="/">Smart Construction</NavbarBrand>
+            <NavbarToggler  onClick={this.toggle} />
+            <Collapse isOpen={this.state.isOpen} navbar>
+              <Nav className="mr-auto" navbar>
+                <NavItem>
+                  <NavLink className="home" style={{color: 'white'}} to="/">Le Projet</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink className="home" style={{color: 'white'}} to="/analyses">Analyses</NavLink>
+                </NavItem>
+                </Nav>
+            </Collapse>
+          </Navbar>
+        </div>
       </header>
     );
   }
