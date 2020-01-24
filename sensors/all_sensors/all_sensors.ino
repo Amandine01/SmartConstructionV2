@@ -2,6 +2,7 @@
 #include <TinyGPS.h>
 #include <Wire.h>
 #include "MutichannelGasSensor.h"
+#include <stdio.h>
 
 /*Variables*/
 TinyGPS gps;
@@ -34,14 +35,15 @@ void setup()
 void loop()
 {
   boolean bogrove = false;
-  boolean bogps = false; 
+  boolean bogps = true; 
   boolean bomicrophone = false;
   char strpacket[800] = "";
   char resgrove[200] = "";
   char resgps[400] = "";
   char resmicro[200] = "";
   char tempstr[200] = "";
-  Serial.println("Je suis un print");
+  float tempfloat = 0.0;
+  int tempint = 0;
 
   /*Variables microphone*/
   float ref_volt = float(readVcc())/1000.0;
@@ -58,7 +60,8 @@ void loop()
     unsigned long age, date, time, chars = 0;
     unsigned short sentences = 0, failed = 0;
     static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-  
+
+    /*
     print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
     print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
     gps.f_get_position(&flat, &flon, &age);
@@ -73,12 +76,40 @@ void loop()
     print_int(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0xFFFFFFFF : (unsigned long)TinyGPS::distance_between(flat, flon, LONDON_LAT, LONDON_LON) / 1000, 0xFFFFFFFF, 9);
     print_float(flat == TinyGPS::GPS_INVALID_F_ANGLE ? TinyGPS::GPS_INVALID_F_ANGLE : TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON), TinyGPS::GPS_INVALID_F_ANGLE, 7, 2);
     print_str(flat == TinyGPS::GPS_INVALID_F_ANGLE ? "*** " : TinyGPS::cardinal(TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON)), 6);
-  
+    
     gps.stats(&chars, &sentences, &failed);
     print_int(chars, 0xFFFFFFFF, 6);
     print_int(sentences, 0xFFFFFFFF, 10);
     print_int(failed, 0xFFFFFFFF, 9);
-    Serial.println();    
+    Serial.println();
+    */
+
+    //Bout de code moche pour choper la date
+    int year;
+    byte month, day, hour, minute, second, hundredths;
+    //unsigned long age;
+    gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
+    if (age == TinyGPS::GPS_INVALID_AGE)
+      Serial.print("Error date");
+    else
+    {
+     char sz[32];
+     sprintf(resgps, "%02d-%02d-%02dT%02d:%02d:%02d ", month, day, year, hour, minute, second);
+    }
+    //print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
+    //smartdelay(0)
+
+    //Bout de code moche pour la latitude et la longitude
+    gps.f_get_position(&flat, &flon, &age);
+    tempfloat = flat*1000;
+    tempint = (int)tempfloat;
+    sprintf(resgps, "Latitude/%d", tempint);
+    tempfloat = flon*1000;
+    tempint = (int)tempfloat;
+    sprintf(resgps, "Longitude/%d", tempint);
+    
+    Serial.print("ResGPS : ");
+    Serial.println(resgps);
   }
 
   /*Microphone*/
@@ -87,6 +118,13 @@ void loop()
     Serial.print("Bruit : ");   
     Serial.print(dbValue);
     Serial.println(" db");
+    tempfloat = dbValue*100;
+    //Serial.print("Tempfloat micro : ");
+    //Serial.println(tempfloat);
+    tempint = (int)tempfloat;
+    //Serial.print("Tempint micro : ");
+    //Serial.println(tempint);
+    sprintf(resmicro, "Son/%d", tempint);
   }
     
   /*Grove*/
@@ -95,37 +133,53 @@ void loop()
     Serial.print("The concentration of CO is ");
     if(c>=0) {
       Serial.print(c);
-      sprintf(resgrove, "%f", c);
+      Serial.println(" ppm");
+      tempfloat = c*1000;
+      //Serial.print("Tempfloat grove 1 : ");
+      //Serial.println(tempfloat);
+      tempint = (int)tempfloat;
+      //Serial.print("Tempint grove 1 : ");
+      //Serial.println(tempint);
+      sprintf(resgrove, "CO/%d", tempint);
     }
     else Serial.print("invalid");
-    Serial.println(" ppm");
-
+    
     c = gas.measure_NO2();
     Serial.print("The concentration of NO2 is ");
     if(c>=0) {
       Serial.print(c);
-      sprintf(tempstr, "%f", c);
+      Serial.println(" ppm");
+      tempfloat = c*1000;
+      //Serial.print("Tempfloat grove 2 : ");
+      //Serial.println(tempfloat);
+      tempint = (int)tempfloat;
+      //Serial.print("Tempint grove 2 : ");
+      //Serial.println(tempint);
+      sprintf(tempstr, "NO2/%d", tempint);
+      strcat(resgrove, " ");
       strcat(resgrove, tempstr);
     }
     else Serial.print("invalid");
-    Serial.println(" ppm");
   }
 
-  Serial.println("Test Concat :");
+  /*Serial.println("Test Concat :");
   Serial.print("Resultats Grove :");
   Serial.println(resgrove);
-  //Serial.print("Resultats Microphone :");
-  //Serial.println(resmicro);
-  //Serial.print("Resultats GPS :");
-  //Serial.println(resgps);
+  Serial.print("Resultats Microphone :");
+  Serial.println(resmicro);
+  Serial.print("Resultats GPS :");
+  Serial.println(resgps);*/
   
-  //Nettoyer le code et mettre
-  //strcpy(strpacket, resgrove);
-  //strcat(strpacket, resmic);
-  //strcat(strpacket, resgps);
+  /**strcpy(strpacket, resgrove);
+  strcat(strpacket, " ");
+  strcat(strpacket, resmicro);
+  strcat(strpacket, " ");
+  strcat(strpacket, resgps);
+  Serial.print("Strpacket : ");
+  Serial.println(strpacket);**/
   
   /*Delay*/
-  smartdelay(2000);
+  smartdelay(20000);
 }
 
 /*GPS*/
