@@ -17,23 +17,23 @@ static void print_str(const char *str, int len);
 void setup()
 {
   /*GPS*/
-  Serial.begin(9600);
+  /*Serial.begin(9600);
   Serial.println("Sats HDOP Latitude  Longitude  Fix  Date       Time     Date Alt    Course Speed Card  Distance Course Card  Chars Sentences Checksum");
   Serial.println("          (deg)     (deg)      Age                      Age  (m)    --- from GPS ----  ---- to London  ----  RX    RX        Fail");
   Serial.println("-------------------------------------------------------------------------------------------------------------------------------------");
-  ss.begin(9600);
+  ss.begin(9600);*/
 
   /*Microphone*/
-  pinMode(sensorPin, INPUT);
+  /*pinMode(sensorPin, INPUT);*/
 
   /*Grove*/
-  gas.begin(0x04);//the default I2C address of the slave is 0x04
-  gas.powerOn();
+  //gas.begin(0x04);//the default I2C address of the slave is 0x04
+  //gas.powerOn();
 }
 
 void loop()
 {
-  boolean bogrove = true;
+  boolean bogrove = false;
   boolean bogps = false; 
   boolean bomicrophone = false;
 
