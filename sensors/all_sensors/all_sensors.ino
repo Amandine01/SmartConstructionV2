@@ -22,7 +22,7 @@ void setup()
   Serial.println("Sats HDOP Latitude  Longitude  Fix  Date       Time     Date Alt    Course Speed Card  Distance Course Card  Chars Sentences Checksum");
   Serial.println("          (deg)     (deg)      Age                      Age  (m)    --- from GPS ----  ---- to London  ----  RX    RX        Fail");
   Serial.println("-------------------------------------------------------------------------------------------------------------------------------------");
-  ss.begin(9600);
+  ss.begin(4800);
 
   /*Microphone*/
   pinMode(sensorPin, INPUT);
@@ -34,7 +34,7 @@ void setup()
 
 void loop()
 {
-  Serial.println("JE SUIS UN PRINT");
+  //Serial.println("JE SUIS UN PRINT");
   boolean bogrove = false;
   boolean bogps = true; 
   boolean bomicrophone = true;
@@ -95,26 +95,26 @@ void loop()
     else
     {
      char sz[32];
-     sprintf(resgps, "%02d-%02d-%02dT%02d:%02d:%02d ", month, day, year, hour, minute, second);
+     sprintf(resgps, "date/02d-%02d-%02dT%02d:%02d:%02d/ ", month, day, year, hour, minute, second);
     }
 
-    Serial.print("Date : ");
-    Serial.println(resgps);
+    //Serial.print("Date : ");
+    //Serial.println(resgps);
     //print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
     //smartdelay(0)
 
     //Bout de code moche pour la latitude et la longitude
     //gps.f_get_position(&flat, &flon, &age);
-    /*tempfloat = flat*100;
+    tempfloat = flat*100;
     tempint = (int)tempfloat;
-    sprintf(resgps, "Latitude/%d", tempint);
-    Serial.print("Latitude : ");
-    Serial.println(tempint);
+    sprintf(resgps, "Latitude/%d/", tempint);
+    //Serial.print("Latitude : ");
+    //Serial.println(tempint);
     tempfloat = flon*100;
     tempint = (int)tempfloat;
-    sprintf(resgps, "Longitude/%d", tempint);
-    Serial.print("Longitude : ");
-    Serial.println(tempint);*/
+    sprintf(resgps, "Longitude/%d/", tempint);
+    //Serial.print("Longitude : ");
+    //Serial.println(tempint);
     
     //Serial.print("ResGPS : ");
     //Serial.println(resgps);
@@ -132,7 +132,7 @@ void loop()
     tempint = (int)tempfloat;
     //Serial.print("Tempint micro : ");
     //Serial.println(tempint);
-    sprintf(resmicro, "Son/%d", tempint);
+    sprintf(resmicro, "Son/%d/", tempint);
   }
     
   /*Grove*/
@@ -148,7 +148,7 @@ void loop()
       tempint = (int)tempfloat;
       //Serial.print("Tempint grove 1 : ");
       //Serial.println(tempint);
-      sprintf(resgrove, "CO/%d", tempint);
+      sprintf(resgrove, "CO/%d/", tempint);
     }
     else Serial.print("invalid");
     
@@ -170,13 +170,13 @@ void loop()
     else Serial.print("invalid");
   }
 
-  /*Serial.println("Test Concat :");
+  Serial.println("Test Concat :");
   Serial.print("Resultats Grove :");
   Serial.println(resgrove);
   Serial.print("Resultats Microphone :");
   Serial.println(resmicro);
   Serial.print("Resultats GPS :");
-  Serial.println(resgps);*/
+  Serial.println(resgps);
   
   /**strcpy(strpacket, resgrove);
   strcat(strpacket, " ");
