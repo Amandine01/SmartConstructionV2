@@ -264,8 +264,8 @@ void loop(void)
   sx1272.setPacketType(PKT_TYPE_DATA);
 
   while (1) {
-      r_size=sprintf((char*)message, "Ping");
-      PRINT_CSTSTR("%s","Sending Ping");  
+      r_size=sprintf((char*)message, "Bang Bang");
+      PRINT_CSTSTR("%s","Sending Bang Bang");  
       PRINTLN;
             
       //e = sx1272.sendPacketTimeoutACK(DEFAULT_DEST_ADDR, message, r_size);
@@ -277,6 +277,7 @@ void loop(void)
       PRINT_VALUE("%d", e);
       PRINTLN;
       
+      /* ONLY USEFULL IF ACK MODE  
       if (e==3)
           PRINT_CSTSTR("%s","No Pong from gw!");
         
@@ -292,7 +293,7 @@ void loop(void)
           sprintf((char*)message,"From gw=%d,%d", sx1272._SNR, sx1272._RSSIpacket);
           PRINT_STR("%s", (char*)message);
           PRINTLN;               
-      }      
+      } */     
 
       PRINTLN;
       
