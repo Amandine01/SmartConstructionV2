@@ -34,9 +34,10 @@ void setup()
 
 void loop()
 {
+  Serial.println("JE SUIS UN PRINT");
   boolean bogrove = false;
   boolean bogps = true; 
-  boolean bomicrophone = false;
+  boolean bomicrophone = true;
   char strpacket[800] = "";
   char resgrove[200] = "";
   char resgps[400] = "";
@@ -61,7 +62,7 @@ void loop()
     unsigned short sentences = 0, failed = 0;
     static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
 
-    /*
+
     print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
     print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
     gps.f_get_position(&flat, &flon, &age);
@@ -82,7 +83,7 @@ void loop()
     print_int(sentences, 0xFFFFFFFF, 10);
     print_int(failed, 0xFFFFFFFF, 9);
     Serial.println();
-    */
+    
 
     //Bout de code moche pour choper la date
     int year;
@@ -96,20 +97,27 @@ void loop()
      char sz[32];
      sprintf(resgps, "%02d-%02d-%02dT%02d:%02d:%02d ", month, day, year, hour, minute, second);
     }
+
+    Serial.print("Date : ");
+    Serial.println(resgps);
     //print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
     //smartdelay(0)
 
     //Bout de code moche pour la latitude et la longitude
-    gps.f_get_position(&flat, &flon, &age);
-    tempfloat = flat*1000;
+    //gps.f_get_position(&flat, &flon, &age);
+    /*tempfloat = flat*100;
     tempint = (int)tempfloat;
     sprintf(resgps, "Latitude/%d", tempint);
-    tempfloat = flon*1000;
+    Serial.print("Latitude : ");
+    Serial.println(tempint);
+    tempfloat = flon*100;
     tempint = (int)tempfloat;
     sprintf(resgps, "Longitude/%d", tempint);
+    Serial.print("Longitude : ");
+    Serial.println(tempint);*/
     
-    Serial.print("ResGPS : ");
-    Serial.println(resgps);
+    //Serial.print("ResGPS : ");
+    //Serial.println(resgps);
   }
 
   /*Microphone*/
