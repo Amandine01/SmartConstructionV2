@@ -33,30 +33,31 @@ void setup()
 
 void loop()
 {
-  boolean bogrove = false;
-  boolean bogps = false; 
-  boolean bomicrophone = false;
+  boolean bogrove = true;
+  boolean bogps = true;
+  boolean bomicrophone = true;
+  char strpacket[800];
 
   /*Variables microphone*/
   //read ref voltage
   float ref_volt = float(readVcc())/1000.0;
-  //Serial.println ("Voltage = "); 
+  //Serial.println ("Voltage = ");
   //Serial.println(ref_volt);
-  //Value in decibel 
+  //Value in decibel
   float dbValue;
 
   /*Variables grove*/
   float c = 0;
 
-  /*GPS*/ 
+  /*GPS*/
   if(bogps == true){
-    
+
     /*Variables gps*/
     float flat, flon;
     unsigned long age, date, time, chars = 0;
     unsigned short sentences = 0, failed = 0;
     static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-  
+
     print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
     print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
     gps.f_get_position(&flat, &flon, &age);
@@ -71,24 +72,24 @@ void loop()
     print_int(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0xFFFFFFFF : (unsigned long)TinyGPS::distance_between(flat, flon, LONDON_LAT, LONDON_LON) / 1000, 0xFFFFFFFF, 9);
     print_float(flat == TinyGPS::GPS_INVALID_F_ANGLE ? TinyGPS::GPS_INVALID_F_ANGLE : TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON), TinyGPS::GPS_INVALID_F_ANGLE, 7, 2);
     print_str(flat == TinyGPS::GPS_INVALID_F_ANGLE ? "*** " : TinyGPS::cardinal(TinyGPS::course_to(flat, flon, LONDON_LAT, LONDON_LON)), 6);
-  
+
     gps.stats(&chars, &sentences, &failed);
     print_int(chars, 0xFFFFFFFF, 6);
     print_int(sentences, 0xFFFFFFFF, 10);
     print_int(failed, 0xFFFFFFFF, 9);
-    Serial.println();    
+    Serial.println();
   }
 
   /*Microphone*/
   if(bomicrophone == true){
-    //Reading the db value 
-    dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0;    
+    //Reading the db value
+    dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0;
     //Printing the value
-    Serial.println (dbValue); 
+    Serial.println (dbValue);
   }
-    
+
   /*Grove*/
-  if(bogrove == true){   
+  if(bogrove == true){
     c = gas.measure_CO();
     Serial.print("The concentration of CO is ");
     if(c>=0) Serial.print(c);
@@ -103,6 +104,11 @@ void loop()
     printf("\n ...");
   }
 
+  //Nettoyer le code et mettre
+  //strcpy(strpacket, resgrove);
+  //strcat(strpacket, resmic);
+  //strcat(strpacket, resgps);
+
   /*Delay*/
   smartdelay(1000);
 }
@@ -111,7 +117,7 @@ void loop()
 static void smartdelay(unsigned long ms)
 {
   unsigned long start = millis();
-  do 
+  do
   {
     while (ss.available())
       gps.encode(ss.read());
@@ -148,7 +154,7 @@ static void print_int(unsigned long val, unsigned long invalid, int len)
   sz[len] = 0;
   for (int i=strlen(sz); i<len; ++i)
     sz[i] = ' ';
-  if (len > 0) 
+  if (len > 0)
     sz[len-1] = ' ';
   Serial.print(sz);
   smartdelay(0);
@@ -194,18 +200,18 @@ long readVcc() {
     ADMUX = _BV(MUX3) | _BV(MUX2);
   #else
     ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
-  #endif  
+  #endif
 
   delay(2); // Wait for Vref to settle
   ADCSRA |= _BV(ADSC); // Start conversion
   while (bit_is_set(ADCSRA,ADSC)); // measuring
 
-  uint8_t low  = ADCL; // must read ADCL first - it then locks ADCH  
+  uint8_t low  = ADCL; // must read ADCL first - it then locks ADCH
   uint8_t high = ADCH; // unlocks both
 
   long result = (high<<8) | low;
 
   result = 1125300L / result; // Calculate Vcc (in mV); 1125300 = 1.1*1023*1000
   return result; // Vcc in millivolts
-  
+
 }
