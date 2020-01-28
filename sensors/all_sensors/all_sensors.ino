@@ -20,7 +20,7 @@ void setup()
   Serial.println("Sats HDOP Latitude  Longitude  Fix  Date       Time     Date Alt    Course Speed Card  Distance Course Card  Chars Sentences Checksum");
   Serial.println("          (deg)     (deg)      Age                      Age  (m)    --- from GPS ----  ---- to London  ----  RX    RX        Fail");
   Serial.println("-------------------------------------------------------------------------------------------------------------------------------------");
-  ss.begin(4800);
+  ss.begin(9600);
 
   /*Microphone*/
   pinMode(sensorPin, INPUT);
@@ -36,14 +36,17 @@ void loop()
   boolean bogrove = true;
   boolean bogps = true; 
   boolean bomicrophone = true;
-  char strpacket[800] = "";
-  char resgrove[200] = "";
-  char resgps[400] = "";
-  char resmicro[200] = "";
-  char tempstr[200] = "";
+  char strpacket[201] = "";
+  char resgrove[50] = "";
+  char resgps[100] = "";
+  char resmicro[50] = "";
+  char tempstr[50] = "";
+  char teststrlat[25] = "";
+  char teststrlon[25] = "";
+  char teststrdate[50] = "";
   float tempfloat = 0.0;
   int tempint = 0;
-
+  
   /*Variables microphone*/
   float ref_volt = float(readVcc())/1000.0;
   float dbValue;
@@ -59,7 +62,6 @@ void loop()
     unsigned long age, date, time, chars = 0;
     unsigned short sentences = 0, failed = 0;
     static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-
 
     print_int(gps.satellites(), TinyGPS::GPS_INVALID_SATELLITES, 5);
     print_int(gps.hdop(), TinyGPS::GPS_INVALID_HDOP, 5);
@@ -81,29 +83,30 @@ void loop()
     print_int(sentences, 0xFFFFFFFF, 10);
     print_int(failed, 0xFFFFFFFF, 9);
     Serial.println();
-    
 
-    //Bout de code moche pour choper la date
+    //Extraction et formatage des données
+    //Disclaimer : oui je sais que ça pourrait être mieux fait, mais le code bug pour aucune raison donc je le laisse moche
     int year;
     byte month, day, hour, minute, second, hundredths;
     //unsigned long age;
     gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
     if (age == TinyGPS::GPS_INVALID_AGE)
+    {
       Serial.print("Error date");
+      sprintf(teststrdate, "date/2020-01-01T00:00:00");
+     }
     else
     {
      char sz[32];
-     sprintf(resgps, "date/02d-%02d-%02dT%02d:%02d:%02d/ ", month, day, year, hour, minute, second);
+     sprintf(teststrdate, "date/02d-%02d-%02dT%02d:%02d:%02d/", month, day, year, hour, minute, second);
     }
-
     //gps.f_get_position(&flat, &flon, &age);
-    tempfloat = flat*100;
-    tempint = (int)tempfloat;
-    sprintf(resgps, "Latitude/%d/", tempint);
-    tempfloat = flon*100;
-    tempint = (int)tempfloat;
-    sprintf(resgps, "Longitude/%d/", tempint);
-
+    //tempfloat = flat*100;
+    tempint = (int)flat;
+    sprintf(teststrlat, "Latitude/%d", tempint);
+    //tempfloat = flon*100;
+    tempint = (int)flon;
+    sprintf(teststrlon, "Longitude/%d/", tempint);
   }
 
   /*Microphone*/
@@ -112,12 +115,9 @@ void loop()
     Serial.print("Bruit : ");   
     Serial.print(dbValue);
     Serial.println(" db");
+    
     tempfloat = dbValue*100;
-    //Serial.print("Tempfloat micro : ");
-    //Serial.println(tempfloat);
     tempint = (int)tempfloat;
-    //Serial.print("Tempint micro : ");
-    //Serial.println(tempint);
     sprintf(resmicro, "Son/%d/", tempint);
   }
     
@@ -128,12 +128,9 @@ void loop()
     if(c>=0) {
       Serial.print(c);
       Serial.println(" ppm");
+      
       tempfloat = c*1000;
-      //Serial.print("Tempfloat grove 1 : ");
-      //Serial.println(tempfloat);
       tempint = (int)tempfloat;
-      //Serial.print("Tempint grove 1 : ");
-      //Serial.println(tempint);
       sprintf(resgrove, "CO/%d/", tempint);
     }
     else Serial.print("invalid");
@@ -143,14 +140,10 @@ void loop()
     if(c>=0) {
       Serial.print(c);
       Serial.println(" ppm");
+      
       tempfloat = c*1000;
-      //Serial.print("Tempfloat grove 2 : ");
-      //Serial.println(tempfloat);
       tempint = (int)tempfloat;
-      //Serial.print("Tempint grove 2 : ");
-      //Serial.println(tempint);
-      sprintf(tempstr, "NO2/%d", tempint);
-      strcat(resgrove, " ");
+      sprintf(tempstr, "NO2/%d/", tempint);
       strcat(resgrove, tempstr);
     }
     else Serial.print("invalid");
@@ -161,16 +154,22 @@ void loop()
   Serial.println(resgrove);
   Serial.print("Resultats Microphone :");
   Serial.println(resmicro);
-  Serial.print("Resultats GPS :");
-  Serial.println(resgps);
-  
-  /**strcpy(strpacket, resgrove);
-  strcat(strpacket, " ");
+  Serial.print("Resultats date :");
+  Serial.println(teststrdate);
+  Serial.print("Resultats Latitude :");
+  Serial.println(teststrlat);
+  Serial.print("Resultats Longitude :");
+  Serial.println(teststrlon);
+
+  sprintf(strpacket, resgrove);
   strcat(strpacket, resmicro);
-  strcat(strpacket, " ");
-  strcat(strpacket, resgps);
-  Serial.print("Strpacket : ");
-  Serial.println(strpacket);**/
+  strcat(strpacket, teststrdate);
+  strcat(strpacket, teststrlon);
+  strcat(strpacket, teststrlat);
+  strcat(strpacket, "\0");
+
+  Serial.print("Packet final :");
+  Serial.println(strpacket);
   
   /*Delay*/
   smartdelay(20000);
