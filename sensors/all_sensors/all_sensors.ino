@@ -2,9 +2,7 @@
 #include <TinyGPS.h>
 #include <Wire.h>
 #include "MutichannelGasSensor.h"
-#include <stdio.h>
 
-/*Variables*/
 TinyGPS gps;
 SoftwareSerial ss(4, 3);
 int sensorPin=13;
@@ -35,7 +33,7 @@ void setup()
 void loop()
 {
   //Serial.println("JE SUIS UN PRINT");
-  boolean bogrove = false;
+  boolean bogrove = true;
   boolean bogps = true; 
   boolean bomicrophone = true;
   char strpacket[800] = "";
@@ -98,26 +96,14 @@ void loop()
      sprintf(resgps, "date/02d-%02d-%02dT%02d:%02d:%02d/ ", month, day, year, hour, minute, second);
     }
 
-    //Serial.print("Date : ");
-    //Serial.println(resgps);
-    //print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
-    //smartdelay(0)
-
-    //Bout de code moche pour la latitude et la longitude
     //gps.f_get_position(&flat, &flon, &age);
     tempfloat = flat*100;
     tempint = (int)tempfloat;
     sprintf(resgps, "Latitude/%d/", tempint);
-    //Serial.print("Latitude : ");
-    //Serial.println(tempint);
     tempfloat = flon*100;
     tempint = (int)tempfloat;
     sprintf(resgps, "Longitude/%d/", tempint);
-    //Serial.print("Longitude : ");
-    //Serial.println(tempint);
-    
-    //Serial.print("ResGPS : ");
-    //Serial.println(resgps);
+
   }
 
   /*Microphone*/

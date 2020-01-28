@@ -22,17 +22,6 @@
 // Include the SX1272
 #include "SX1272.h"
 
-/********************************************************************
- _____              __ _                       _   _             
-/  __ \            / _(_)                     | | (_)            
-| /  \/ ___  _ __ | |_ _  __ _ _   _ _ __ __ _| |_ _  ___  _ __  
-| |    / _ \| '_ \|  _| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \ 
-| \__/\ (_) | | | | | | | (_| | |_| | | | (_| | |_| | (_) | | | |
- \____/\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
-                          __/ |                                  
-                         |___/                                   
-********************************************************************/
-
 // IMPORTANT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // please uncomment only 1 choice
@@ -84,15 +73,6 @@ const uint32_t DEFAULT_CHANNEL=CH_00_433;
 #define node_addr 8
 //////////////////////////////////////////////////////////////////
 
-/*****************************
- _____           _      
-/  __ \         | |     
-| /  \/ ___   __| | ___ 
-| |    / _ \ / _` |/ _ \
-| \__/\ (_) | (_| |  __/
- \____/\___/ \__,_|\___|
-*****************************/ 
-
 // we wrapped Serial.println to support the Arduino Zero or M0
 #if defined __SAMD21G18A__ && not defined ARDUINO_SAMD_FEATHER_M0
 #define PRINTLN                   SerialUSB.println("")              
@@ -110,20 +90,9 @@ const uint32_t DEFAULT_CHANNEL=CH_00_433;
 
 #define DEFAULT_DEST_ADDR 1
 
-uint8_t message[100];
+uint8_t message[200];
 
 int loraMode=LORAMODE;
-
-/*****************************
- _____      _               
-/  ___|    | |              
-\ `--.  ___| |_ _   _ _ __  
- `--. \/ _ \ __| | | | '_ \ 
-/\__/ /  __/ |_| |_| | |_) |
-\____/ \___|\__|\__,_| .__/ 
-                     | |    
-                     |_|    
-******************************/
 
 void setup()
 {
@@ -131,9 +100,9 @@ void setup()
   
   // Open serial communications and wait for port to open:
 #if defined __SAMD21G18A__ && not defined ARDUINO_SAMD_FEATHER_M0 
-  SerialUSB.begin(38400);
+  SerialUSB.begin(9600);
 #else
-  Serial.begin(38400);  
+  Serial.begin(9600);  
 #endif 
 
   // Print a start message
@@ -264,7 +233,7 @@ void loop(void)
   sx1272.setPacketType(PKT_TYPE_DATA);
 
   while (1) {
-      r_size=sprintf((char*)message, "Bang Bang");
+      r_size=sprintf((char*)message, "\\!##CO/45");
       PRINT_CSTSTR("%s","Sending Bang Bang");  
       PRINTLN;
             
