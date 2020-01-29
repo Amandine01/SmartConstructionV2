@@ -222,7 +222,7 @@ void loop(void)
   sx1272.setPacketType(PKT_TYPE_DATA);
 
   while (1) {
-      r_size=sprintf((char*)message, "\\!##CO/45");
+      r_size=sprintf((char*)message, "\\!##Reponse/42");
       PRINT_CSTSTR("%s","Sending Bang Bang");  
       PRINTLN;
             
