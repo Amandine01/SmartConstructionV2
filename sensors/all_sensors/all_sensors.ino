@@ -1,11 +1,13 @@
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
 #include <Wire.h>
-#include "MutichannelGasSensor.h"
+//#include "MutichannelGasSensor.h"
 
-//Configuration LoRa
-/*
-#include <SPI.h> 
+TinyGPS gps;
+SoftwareSerial ss(4, 3);
+//int sensorPin=13;
+
+#include <SPI.h>
 #include "SX1272.h"
 #define ETSI_EUROPE_REGULATION
 #define PABOOST
@@ -49,13 +51,8 @@ const uint32_t DEFAULT_CHANNEL=CH_00_433;
 #endif
 
 #define DEFAULT_DEST_ADDR 1
-
 uint8_t message[200];
 int loraMode=LORAMODE;
-*/
-TinyGPS gps;
-SoftwareSerial ss(4, 3);
-int sensorPin=13;
 
 static void smartdelay(unsigned long ms);
 static void print_float(float val, float invalid, int len, int prec);
@@ -65,23 +62,20 @@ static void print_str(const char *str, int len);
 
 void setup()
 {
-  //Setup capteur
-  /*GPS*/
+  //GPS
   Serial.begin(9600);
   Serial.println("Sats HDOP Latitude  Longitude  Fix  Date       Time     Date Alt    Course Speed Card  Distance Course Card  Chars Sentences Checksum");
   Serial.println("          (deg)     (deg)      Age                      Age  (m)    --- from GPS ----  ---- to London  ----  RX    RX        Fail");
   Serial.println("-------------------------------------------------------------------------------------------------------------------------------------");
   ss.begin(9600);
 
-  /*Microphone*/
-  pinMode(sensorPin, INPUT);
+  //Microphone
+  //pinMode(sensorPin, INPUT);
 
-  /*Grove*/
-  gas.begin(0x04);//the default I2C address of the slave is 0x04
-  gas.powerOn();
+  //Grove
+  /*gas.begin(0x04);//the default I2C address of the slave is 0x04
+  gas.powerOn();*/
 
-  //setup LoRa
-  /*
   int e;
   
   // Open serial communications and wait for port to open:
@@ -194,16 +188,17 @@ void setup()
   
   // Print a success message
   PRINT_CSTSTR("%s","SX1272 successfully configured\n");
+
   delay(500);
-  */
+  
 }
 
 void loop()
 {
   //Serial.println("JE SUIS UN PRINT");
-  boolean bogrove = true;
+  //boolean bogrove = true;
   boolean bogps = true; 
-  boolean bomicrophone = true;
+  //boolean bomicrophone = true;
   char strpacket[201] = "";
   char resgrove[50] = "";
   char resgps[100] = "";
@@ -214,15 +209,20 @@ void loop()
   char teststrdate[50] = "";
   float tempfloat = 0.0;
   int tempint = 0;
+
+  uint8_t r_size;
+  int e;
+  sx1272.CarrierSense();
+  sx1272.setPacketType(PKT_TYPE_DATA);
   
-  /*Variables microphone*/
-  float ref_volt = float(readVcc())/1000.0;
-  float dbValue;
+  //Variables microphone
+  /*float ref_volt = float(readVcc())/1000.0;
+  float dbValue;*/
 
-  /*Variables grove*/
-  float c = 0;
+  //Variables grove
+  //float c = 0;
 
-  /*GPS*/ 
+  //GPS 
   if(bogps == true){
     
     /*Variables gps*/
@@ -277,8 +277,8 @@ void loop()
     sprintf(teststrlon, "Longitude/%d/", tempint);
   }
 
-  /*Microphone*/
-  if(bomicrophone == true){
+  //Microphone
+  /*if(bomicrophone == true){
     dbValue = (analogRead(sensorPin)/1024.0)*ref_volt*50.0; 
     Serial.print("Bruit : ");   
     Serial.print(dbValue);
@@ -287,10 +287,10 @@ void loop()
     tempfloat = dbValue*100;
     tempint = (int)tempfloat;
     sprintf(resmicro, "Son/%d/", tempint);
-  }
+  }*/
     
-  /*Grove*/
-  if(bogrove == true){   
+  //Grove
+  /*if(bogrove == true){   
     c = gas.measure_CO();
     Serial.print("The concentration of CO is ");
     if(c>=0) {
@@ -315,9 +315,9 @@ void loop()
       strcat(resgrove, tempstr);
     }
     else Serial.print("invalid");
-  }
+  }*/
 
-  Serial.println("Test Concat :");
+  /*Serial.println("Test Concat :");
   Serial.print("Resultats Grove :");
   Serial.println(resgrove);
   Serial.print("Resultats Microphone :");
@@ -327,10 +327,11 @@ void loop()
   Serial.print("Resultats Latitude :");
   Serial.println(teststrlat);
   Serial.print("Resultats Longitude :");
-  Serial.println(teststrlon);
+  Serial.println(teststrlon);*/
 
-  sprintf(strpacket, resgrove);
-  strcat(strpacket, resmicro);
+  /*sprintf(strpacket, resgrove);
+  strcat(strpacket, resmicro);*/
+  sprintf(strpacket, "\\!");
   strcat(strpacket, teststrdate);
   strcat(strpacket, teststrlon);
   strcat(strpacket, teststrlat);
@@ -339,28 +340,18 @@ void loop()
   Serial.print("Packet final :");
   Serial.println(strpacket);
 
-  /*
-  uint8_t r_size;
-  int e;
-
-  sx1272.CarrierSense();
-
-  sx1272.setPacketType(PKT_TYPE_DATA);
-
-  while (1) {
-      r_size=sprintf((char*)message, "\\!##CO/45");
-      PRINT_CSTSTR("%s","Sending Bang Bang");  
-      PRINTLN;
+  r_size=sprintf((char*)message, strpacket);
+  PRINT_CSTSTR("%s","Sending Bang Bang");  
+  PRINTLN;
             
-      //e = sx1272.sendPacketTimeoutACK(DEFAULT_DEST_ADDR, message, r_size);
+  //e = sx1272.sendPacketTimeoutACK(DEFAULT_DEST_ADDR, message, r_size);
 
-      // this is the no-ack version
-      e = sx1272.sendPacketTimeout(DEFAULT_DEST_ADDR, message, r_size);
+  // this is the no-ack version
+  e = sx1272.sendPacketTimeout(DEFAULT_DEST_ADDR, message, r_size);
             
-      PRINT_CSTSTR("%s","Packet sent, state ");
-      PRINT_VALUE("%d", e);
-      PRINTLN; 
-  */
+  PRINT_CSTSTR("%s","Packet sent, state ");
+  PRINT_VALUE("%d", e);
+  PRINTLN;
   
   /*Delay*/
   smartdelay(20000);
@@ -440,9 +431,9 @@ static void print_str(const char *str, int len)
   smartdelay(0);
 }
 
-/*Microphone*/
+//Microphone
 // read voltage to ensure ADC converts properly
-long readVcc() {
+/*long readVcc() {
   // Read 1.1V reference against AVcc
   // set the reference to Vcc and the measurement to the internal 1.1V reference
   #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
@@ -467,4 +458,4 @@ long readVcc() {
   result = 1125300L / result; // Calculate Vcc (in mV); 1125300 = 1.1*1023*1000
   return result; // Vcc in millivolts
   
-}
+}*/
