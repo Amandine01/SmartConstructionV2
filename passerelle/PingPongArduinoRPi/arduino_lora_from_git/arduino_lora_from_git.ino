@@ -212,17 +212,6 @@ void setup()
   delay(500);
 }
 
-/*****************************
- _                       
-| |                      
-| |     ___   ___  _ __  
-| |    / _ \ / _ \| '_ \ 
-| |___| (_) | (_) | |_) |
-\_____/\___/ \___/| .__/ 
-                  | |    
-                  |_|    
-*****************************/
-
 void loop(void)
 {
   uint8_t r_size;
@@ -233,7 +222,7 @@ void loop(void)
   sx1272.setPacketType(PKT_TYPE_DATA);
 
   while (1) {
-      r_size=sprintf((char*)message, "\\!##CO/45");
+      r_size=sprintf((char*)message, "\\!##Reponse/42");
       PRINT_CSTSTR("%s","Sending Bang Bang");  
       PRINTLN;
             
