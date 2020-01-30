@@ -100,9 +100,11 @@ void setup()
   
   // Open serial communications and wait for port to open:
 #if defined __SAMD21G18A__ && not defined ARDUINO_SAMD_FEATHER_M0 
-  SerialUSB.begin(9600);
+  SerialUSB.begin(38400);
+  //Serial.println("Mange tes morts");
 #else
-  Serial.begin(9600);  
+  Serial.begin(38400);
+  //Serial.println("Bli bloup"); 
 #endif 
 
   // Print a start message
