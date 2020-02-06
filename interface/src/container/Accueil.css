@@ -22,13 +22,19 @@
 
 .texte{
   margin-top: 20px;
-  text-align: center;
+  margin-right: 30px;
+  text-align: justify;
   padding-left: 80px;
 }
 
 .image{
   margin-top: 20px;
   text-align: center;
+}
+
+.photo2{
+  height: 400px;
+  margin-left: 40px;
 }
 
 .member{

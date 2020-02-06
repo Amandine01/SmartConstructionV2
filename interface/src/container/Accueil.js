@@ -11,6 +11,8 @@ import Marie from '../component/marie.jpg';
 import Manar from '../component/manar.jpg';
 import Agetha from '../component/agetha.jpg';
 import Aurelio from '../component/aurelio.jpg';
+import Projet from '../component/projet.jpg';
+
 
 
 export default class Accueil extends Component {
@@ -29,14 +31,24 @@ export default class Accueil extends Component {
         {/*section présentation du projet*/}
         <Col xs="12" sm="12"><h2 className="soustitre"> Le projet </h2></Col>
         <Col xs="12" sm="6"> 
-          <div className="image"> 
-            Insérer image ici 
-          </div>
+          <img className="photo2" src={Projet}/>
+             
+          
         </Col>
 
         <Col xs="12" sm="6"> 
           <div className="texte"> 
-            Voici l'interface de notre projet PFE Smart Construction 
+          Smart Construction, un dispositif de contrôle de la qualité de l’air et du niveau sonore sur les chantiers de construction. Ce projet a pour but de renseigner les résidents alentours sur l’incidence du chantier sur leur qualité de vie et ainsi de leur indiquer les zones où sont dégagées les plus grandes quantités de pollution.
+
+  Un ensemble de capteurs mesure le taux de pollution émise à un endroit donné, à savoir : 
+  <ul>
+  <li>Les gaz polluants comme le Monoxyde de Carbone (CO) et le Dioxyde d’Azote (NO2)</li>
+  <li>Les différents types de particules fines émises, le PM10 et PM2.5</li>
+  <li>Les nuisances sonores</li>
+  <li>La position GPS du dispositif</li>
+  </ul>
+ 
+
           </div>
         </Col>
         
