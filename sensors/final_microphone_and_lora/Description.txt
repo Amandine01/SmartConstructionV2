@@ -1,0 +1,5 @@
+In this program, we measure the sound level thanks to a
+microphone and we send the result to the gateway thanks to a LoRa module.
+
+(respecting the desired format so the gateway can automatically register
+results in its local MongoDB database).

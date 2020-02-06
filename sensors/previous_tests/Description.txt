@@ -1,0 +1,6 @@
+Previous tests for using 
+  GPS
+  Gaz sensor
+  Particule sensor
+  Microphone
+  LoRa module
